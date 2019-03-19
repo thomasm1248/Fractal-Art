@@ -30,7 +30,7 @@ var points = {
 // Super Detailed Style
 var style = {
 	level: 19,
-	scale: 2,
+	scale: 1,
 	background: "transparent",
 	alpha: 1,
 	color: {
