@@ -16,6 +16,11 @@ var points = {
 		drag: false,
 		x: canvas.width * 0.55,
 		y: canvas.height * 0.4
+	},
+	"c": {
+		drage: false,
+		x: canvas.width / 2,
+		y: canvas.height / 2
 	}
 };
 
@@ -25,6 +30,7 @@ var points = {
 // Super Detailed Style
 var style = {
 	level: 19,
+	scale: 2,
 	background: "transparent",
 	alpha: 1,
 	color: {
@@ -67,8 +73,8 @@ function drawFractal(superDetailed) {
 	var cx = canvas.width / 2;
 	var cy = canvas.height / 2;
 	var vectors = [
-		convertVector(cx, cy, points['a'].x, points['a'].y),
-		convertVector(cx, cy, points['b'].x, points['b'].y)
+		convertVector(points['c'].x, points['c'].y, points['a'].x, points['a'].y),
+		convertVector(points['c'].x, points['c'].y, points['b'].x, points['b'].y)
 	];
 	for(var i in vectors) {
 		vectors[i].mag /= cy / 2;
@@ -77,8 +83,8 @@ function drawFractal(superDetailed) {
 	
 	var startingLines = [
 		{
-			x: cx,
-			y: cy,
+			x: 0,
+			y: 0,
 			dir: Math.PI * 1.5,
 			mag: cy / 2
 		}
@@ -115,7 +121,11 @@ function drawFractal(superDetailed) {
 	
 	if(superDetailed) ctx.globalAlpha = style.alpha;
 	ctx.strokeStyle = "black";
+	ctx.save();
+	ctx.translate(points["c"].x, points["c"].y);
+	ctx.scale(style.scale, style.scale);
 	drawStages(superDetailed ? style.level : 9, startingLines);
+	ctx.restore();
 	ctx.globalAlpha = 1;
 }
 drawFractal(false);
@@ -149,6 +159,9 @@ window.addEventListener("keydown", function(e) {
 		case 50:
 			points["b"].drag = true;
 			break;
+		case 51:
+			points["c"].drag = true;
+			break;
 		case 32:
 			drawFractal(true);
 			break;
@@ -163,6 +176,7 @@ window.addEventListener("keydown", function(e) {
 			} else {
 				style[input[0]] = input[1];
 			}
+			drawFractal(false);
 			break;
 	}
 }, false);
@@ -174,6 +188,9 @@ window.addEventListener("keyup", function(e) {
 			break;
 		case 50:
 			points["b"].drag = false;
+			break;
+		case 51:
+			points["c"].drag = false;
 			break;
 	}
 }, false);
